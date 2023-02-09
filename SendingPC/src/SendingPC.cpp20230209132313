@@ -1,0 +1,145 @@
+﻿// -*- C++ -*-
+// <rtc-template block="description">
+/*!
+ * @file  SendingPC.cpp
+ * @brief ModuleDescription
+ *
+ */
+// </rtc-template>
+
+#include "SendingPC.h"
+
+// Module specification
+// <rtc-template block="module_spec">
+#if RTM_MAJOR_VERSION >= 2
+static const char *const sendingpc_spec[] =
+#else
+static const char *sendingpc_spec[] =
+#endif
+    {
+        "implementation_id", "SendingPC",
+        "type_name", "SendingPC",
+        "description", "ModuleDescription",
+        "version", "1.0.0",
+        "vendor", "suzakutakumi",
+        "category", "Actuator",
+        "activity_type", "PERIODIC",
+        "kind", "DataFlowComponent",
+        "max_instance", "1",
+        "language", "C++",
+        "lang_type", "compile",
+        ""};
+// </rtc-template>
+
+/*!
+ * @brief constructor
+ * @param manager Maneger Object
+ */
+SendingPC::SendingPC(RTC::Manager *manager)
+    // <rtc-template block="initializer">
+    : RTC::DataFlowComponentBase(manager),
+      m_PCOut("PC", m_PC)
+// </rtc-template>
+{
+}
+
+/*!
+ * @brief destructor
+ */
+SendingPC::~SendingPC()
+{
+}
+
+RTC::ReturnCode_t SendingPC::onInitialize()
+{
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // Set InPort buffers
+
+  // Set OutPort buffer
+  addOutPort("PC", m_PCOut);
+
+  // Set service provider to Ports
+
+  // Set service consumers to Ports
+
+  // Set CORBA Service Ports
+
+  // </rtc-template>
+
+  // <rtc-template block="bind_config">
+  // </rtc-template>
+
+  return RTC::RTC_OK;
+}
+
+/*
+RTC::ReturnCode_t SendingPC::onFinalize()
+{
+  return RTC::RTC_OK;
+}
+*/
+
+// RTC::ReturnCode_t SendingPC::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//   return RTC::RTC_OK;
+// }
+
+// RTC::ReturnCode_t SendingPC::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//   return RTC::RTC_OK;
+// }
+
+RTC::ReturnCode_t SendingPC::onActivated(RTC::UniqueId /*ec_id*/)
+{
+  return RTC::RTC_OK;
+}
+
+// RTC::ReturnCode_t SendingPC::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//   return RTC::RTC_OK;
+// }
+
+RTC::ReturnCode_t SendingPC::onExecute(RTC::UniqueId /*ec_id*/)
+{
+  m_PC.PointCloud.points;
+  m_PC.m_PCOut.write();
+  return RTC::RTC_OK;
+}
+
+// RTC::ReturnCode_t SendingPC::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//   return RTC::RTC_OK;
+// }
+
+// RTC::ReturnCode_t SendingPC::onError(RTC::UniqueId /*ec_id*/)
+//{
+//   return RTC::RTC_OK;
+// }
+
+// RTC::ReturnCode_t SendingPC::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//   return RTC::RTC_OK;
+// }
+
+// RTC::ReturnCode_t SendingPC::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//   return RTC::RTC_OK;
+// }
+
+// RTC::ReturnCode_t SendingPC::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//   return RTC::RTC_OK;
+// }
+
+extern "C"
+{
+
+  void SendingPCInit(RTC::Manager *manager)
+  {
+    coil::Properties profile(sendingpc_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<SendingPC>,
+                             RTC::Delete<SendingPC>);
+  }
+}

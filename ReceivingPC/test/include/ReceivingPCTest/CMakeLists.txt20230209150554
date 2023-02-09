@@ -1,0 +1,4 @@
+set(hdrs
+    ReceivingPCTest.h
+    PARENT_SCOPE
+    )
